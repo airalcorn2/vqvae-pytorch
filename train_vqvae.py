@@ -35,7 +35,7 @@ def save_img_tensors_as_grid(img_tensors, nrows, f):
 
 
 # Initialize model.
-device = torch.device("cuda:1")
+device = torch.device("cuda:0")
 use_ema = True
 model_args = {
     "in_channels": 3,
@@ -61,7 +61,8 @@ transform = transforms.Compose(
         normalize,
     ]
 )
-train_dataset = CIFAR10("../data", True, transform, download=True)
+data_root = "../data"
+train_dataset = CIFAR10(data_root, True, transform, download=True)
 train_data_variance = np.var(train_dataset.data / 255)
 train_loader = DataLoader(
     dataset=train_dataset,
@@ -121,7 +122,7 @@ for epoch in range(epochs):
 # Generate and save reconstructions.
 model.eval()
 
-valid_dataset = CIFAR10("../data", False, transform, download=True)
+valid_dataset = CIFAR10(data_root, False, transform, download=True)
 valid_loader = DataLoader(
     dataset=valid_dataset,
     batch_size=batch_size,
